@@ -1,0 +1,69 @@
+﻿{
+   "ContextClassName": "TpdoriosContext",
+   "ContextNamespace": null,
+   "DefaultDacpacSchema": null,
+   "FilterSchemas": false,
+   "IncludeConnectionString": false,
+   "ModelNamespace": null,
+   "OutputContextPath": "Data",
+   "OutputPath": "Models",
+   "ProjectRootNamespace": "CourierCore",
+   "Schemas": null,
+   "SelectedHandlebarsLanguage": 0,
+   "SelectedToBeGenerated": 0,
+   "Tables": [
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_Clients]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_GuestDeliveries]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_Guests]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_Locations]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_MenuItems]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_MenuVolumeTypes]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_OrderItems]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_Orders]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_People]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_UserLocationPresence]"
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_Users]"
+      }
+   ],
+   "UseDatabaseNames": false,
+   "UseDbContextSplitting": false,
+   "UseFluentApiOnly": true,
+   "UseHandleBars": false,
+   "UseInflector": false,
+   "UseLegacyPluralizer": false,
+   "UseNodaTime": false,
+   "UseSpatial": false,
+   "UseStoredProcedures": false
+}
