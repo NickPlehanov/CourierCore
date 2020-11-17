@@ -19,21 +19,37 @@ namespace CourierCore.Controllers {
         }
 
         // GET: api/TpUserLocationPresences
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<TpUserLocationPresence>>> GetTpUserLocationPresence() {
-            return await _context.TpUserLocationPresence.ToListAsync();
-        }
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<TpUserLocationPresence>>> GetTpUserLocationPresence() {
+        //    return await _context.TpUserLocationPresence.ToListAsync();
+        //}
 
         // GET: api/TpUserLocationPresences/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TpUserLocationPresence>> GetTpUserLocationPresence(Guid id) {
-            var tpUserLocationPresence = await _context.TpUserLocationPresence.FindAsync(id);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<TpUserLocationPresence>> GetTpUserLocationPresence(Guid id) {
+        //    var tpUserLocationPresence = await _context.TpUserLocationPresence.FindAsync(id);
 
-            if(tpUserLocationPresence == null) {
-                return NotFound();
+        //    if(tpUserLocationPresence == null) {
+        //        return NotFound();
+        //    }
+
+        //    return tpUserLocationPresence;
+        //}
+        // GET: api/TpUserLocationPresences/5
+        [HttpGet("{usr_id}")]
+        public IEnumerable<TpUserLocationPresence> GetTpUserLocationPresence([FromQuery]string usr_id) {
+            Guid _usrID = Guid.TryParse(usr_id,out _) ? Guid.Parse(usr_id) : Guid.Empty;
+            if(_usrID == Guid.Empty)
+                return (IEnumerable<TpUserLocationPresence>)NotFound();
+            else {
+                var tpUserLocationPresence = _context.TpUserLocationPresence.Where(x => x.UslpUsrId == _usrID);
+
+                if(tpUserLocationPresence == null) {
+                    return (IEnumerable<TpUserLocationPresence>)NotFound();
+                }
+
+                return (IEnumerable<TpUserLocationPresence>)tpUserLocationPresence;
             }
-
-            return tpUserLocationPresence;
         }
 
         // PUT: api/TpUserLocationPresences/5

@@ -25,12 +25,22 @@ namespace CourierCore.Controllers {
         }
 
         // GET: api/TpUsers/5
-        [HttpGet("{id}")]
+        [HttpGet("id")]
         public async Task<ActionResult<TpUsers>> GetTpUsers(Guid id) {
             var tpUsers = await _context.TpUsers.FindAsync(id);
 
             if(tpUsers == null) {
                 return NotFound();
+            }
+
+            return tpUsers;
+        }
+        [HttpGet("login")]
+        public IEnumerable<TpUsers> GetTpUsers([FromQuery] string login) {
+            var tpUsers = _context.TpUsers.Where(x=>x.UsrLogin.Contains(login));
+
+            if(tpUsers == null) {
+                return (IEnumerable<TpUsers>)NotFound();
             }
 
             return tpUsers;
