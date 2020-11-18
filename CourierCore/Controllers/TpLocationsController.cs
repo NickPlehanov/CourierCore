@@ -25,12 +25,22 @@ namespace CourierCore.Controllers {
         }
 
         // GET: api/TpLocations/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TpLocations>> GetTpLocations(Guid id) {
+        [HttpGet("id")]
+        public async Task<ActionResult<TpLocations>> GetTpLocations([FromQuery] Guid id) {
             var tpLocations = await _context.TpLocations.FindAsync(id);
 
             if(tpLocations == null) {
                 return NotFound();
+            }
+
+            return tpLocations;
+        }
+        [HttpGet("description")]
+        public IEnumerable<TpLocations> GetTpLocations([FromQuery]string description) {
+            var tpLocations =  _context.TpLocations.Where(x => x.LocDescription.Contains(description) && x.LocDelId == null);
+
+            if(tpLocations == null) {
+                return (IEnumerable<TpLocations>)NotFound();
             }
 
             return tpLocations;

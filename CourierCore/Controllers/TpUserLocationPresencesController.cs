@@ -42,7 +42,7 @@ namespace CourierCore.Controllers {
             if(_usrID == Guid.Empty)
                 return (IEnumerable<TpUserLocationPresence>)NotFound();
             else {
-                var tpUserLocationPresence = _context.TpUserLocationPresence.Where(x => x.UslpUsrId == _usrID);
+                var tpUserLocationPresence = _context.TpUserLocationPresence.Where(x => x.UslpUsrId == _usrID && x.UslpDateEnd==null);
 
                 if(tpUserLocationPresence == null) {
                     return (IEnumerable<TpUserLocationPresence>)NotFound();
@@ -82,7 +82,7 @@ namespace CourierCore.Controllers {
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<TpUserLocationPresence>> PostTpUserLocationPresence(TpUserLocationPresence tpUserLocationPresence) {
+        public async Task<ActionResult<TpUserLocationPresence>> PostTpUserLocationPresence([FromBody] TpUserLocationPresence tpUserLocationPresence) {
             _context.TpUserLocationPresence.Add(tpUserLocationPresence);
             try {
                 await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
