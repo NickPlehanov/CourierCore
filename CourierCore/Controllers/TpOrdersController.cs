@@ -24,16 +24,45 @@ namespace CourierCore.Controllers {
             return await _context.TpOrders.ToListAsync();
         }
 
-        // GET: api/TpOrders/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TpOrders>> GetTpOrders(Guid id) {
-            var tpOrders = await _context.TpOrders.FindAsync(id);
+        //// GET: api/TpOrders/id?id=5
+        //[HttpGet("id")]
+        //public async Task<ActionResult<TpOrders>> GetTpOrders([FromQuery]Guid id) {
+        //    var tpOrders = await _context.TpOrders.FindAsync(id);
 
-            if(tpOrders == null) {
-                return NotFound();
-            }
+        //    if(tpOrders == null) {
+        //        return NotFound();
+        //    }
 
-            return tpOrders;
+        //    return tpOrders;
+        //}
+        // GET: api/TpOrders/OrdrInfo?id=5
+        [HttpGet("OrdrInfo")]
+        public async Task<ActionResult<IEnumerable<Orders_OrderItem_MenuItems>>> GetTpOrders([FromQuery] Guid gest_ID) {
+            var ordr_info = from o in _context.TpOrders
+                            join oi in _context.TpOrderItems on o.OrdrId equals oi.OritOrdrId
+                            join mi in _context.TpMenuItems on oi.OritMitmId equals mi.MitmId
+                            where o.OrdrGestId == gest_ID
+                            select new {
+                                ordrGestID = o.OrdrGestId,
+                                ordrID = o.OrdrId,
+                                oritMitmID = oi.OritMitmId,
+                                oritVolume = oi.OritVolume,
+                                oritCount = oi.OritCount,
+                                mitmName = mi.MitmName,
+                                oritPrice=oi.OritPrice
+                            };
+            List<Orders_OrderItem_MenuItems> o_oi_mi = new List<Orders_OrderItem_MenuItems>();
+            foreach(var item in ordr_info) 
+                o_oi_mi.Add(new Orders_OrderItem_MenuItems() {
+                    OrdrGestID=item.ordrGestID,
+                    OrdrID=item.ordrID,
+                    OrdrMitmID=item.oritMitmID,
+                    OritVolume=item.oritVolume,
+                    OritCount=item.oritCount,
+                    OritPrice=item.oritPrice,
+                    MitmName=item.mitmName
+                });
+            return o_oi_mi;
         }
 
         // PUT: api/TpOrders/5
@@ -68,7 +97,7 @@ namespace CourierCore.Controllers {
         [HttpPost]
         public async Task<ActionResult<TpOrders>> PostTpOrders(TpOrders tpOrders) {
             _context.TpOrders.Add(tpOrders);
-            await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+            await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTpOrders",new { id = tpOrders.OrdrId },tpOrders);

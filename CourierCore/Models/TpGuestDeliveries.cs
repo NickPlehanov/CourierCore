@@ -26,6 +26,7 @@ namespace CourierCore.Models
         public string GsdlvExtraInfo { get; set; }
 
         public virtual TpGuests GsdlvGest { get; set; }
+        public virtual TpPayTypes GsdlvPytpIdPrepa { get; set; }
         public virtual TpUsers GsdlvUsrIdCourierNavigation { get; set; }
     }
 }

@@ -68,7 +68,7 @@ namespace CourierCore.Controllers {
         [HttpPost]
         public async Task<ActionResult<TpOrderItems>> PostTpOrderItems(TpOrderItems tpOrderItems) {
             _context.TpOrderItems.Add(tpOrderItems);
-            await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+            await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTpOrderItems",new { id = tpOrderItems.OritId },tpOrderItems);

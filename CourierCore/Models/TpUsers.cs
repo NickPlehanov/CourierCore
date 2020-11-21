@@ -8,10 +8,12 @@ namespace CourierCore.Models
     {
         public TpUsers()
         {
+            TpChecks = new HashSet<TpChecks>();
             TpGuestDeliveries = new HashSet<TpGuestDeliveries>();
             TpGuests = new HashSet<TpGuests>();
             TpOrdersOrdrUsr = new HashSet<TpOrders>();
             TpOrdersOrdrUsrIdOperatorNavigation = new HashSet<TpOrders>();
+            TpPreChecks = new HashSet<TpPreChecks>();
             TpUserLocationPresenceUslpUsr = new HashSet<TpUserLocationPresence>();
             TpUserLocationPresenceUslpUsrIdBeginNavigation = new HashSet<TpUserLocationPresence>();
             TpUserLocationPresenceUslpUsrIdEndNavigation = new HashSet<TpUserLocationPresence>();
@@ -33,10 +35,12 @@ namespace CourierCore.Models
         public bool UsrIsPortalLogin { get; set; }
 
         public virtual TpPeople UsrPepl { get; set; }
+        public virtual ICollection<TpChecks> TpChecks { get; set; }
         public virtual ICollection<TpGuestDeliveries> TpGuestDeliveries { get; set; }
         public virtual ICollection<TpGuests> TpGuests { get; set; }
         public virtual ICollection<TpOrders> TpOrdersOrdrUsr { get; set; }
         public virtual ICollection<TpOrders> TpOrdersOrdrUsrIdOperatorNavigation { get; set; }
+        public virtual ICollection<TpPreChecks> TpPreChecks { get; set; }
         public virtual ICollection<TpUserLocationPresence> TpUserLocationPresenceUslpUsr { get; set; }
         public virtual ICollection<TpUserLocationPresence> TpUserLocationPresenceUslpUsrIdBeginNavigation { get; set; }
         public virtual ICollection<TpUserLocationPresence> TpUserLocationPresenceUslpUsrIdEndNavigation { get; set; }

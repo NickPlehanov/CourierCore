@@ -17,6 +17,8 @@ namespace CourierCore.Data
         {
         }
 
+        public virtual DbSet<TpCheckPayments> TpCheckPayments { get; set; }
+        public virtual DbSet<TpChecks> TpChecks { get; set; }
         public virtual DbSet<TpClients> TpClients { get; set; }
         public virtual DbSet<TpGuestDeliveries> TpGuestDeliveries { get; set; }
         public virtual DbSet<TpGuests> TpGuests { get; set; }
@@ -25,12 +27,149 @@ namespace CourierCore.Data
         public virtual DbSet<TpMenuVolumeTypes> TpMenuVolumeTypes { get; set; }
         public virtual DbSet<TpOrderItems> TpOrderItems { get; set; }
         public virtual DbSet<TpOrders> TpOrders { get; set; }
+        public virtual DbSet<TpPayTypes> TpPayTypes { get; set; }
         public virtual DbSet<TpPeople> TpPeople { get; set; }
+        public virtual DbSet<TpPreCheckItems> TpPreCheckItems { get; set; }
+        public virtual DbSet<TpPreChecks> TpPreChecks { get; set; }
         public virtual DbSet<TpUserLocationPresence> TpUserLocationPresence { get; set; }
         public virtual DbSet<TpUsers> TpUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<TpCheckPayments>(entity =>
+            {
+                entity.HasKey(e => e.ChpyId)
+                    .HasName("PK_CheckPayments")
+                    .IsClustered(false);
+
+                entity.ToTable("tp_CheckPayments");
+
+                entity.HasIndex(e => e.ChpyAtopId)
+                    .HasName("CK_tp_CheckPayments_chpy_atop_ID");
+
+                entity.HasIndex(e => e.ChpyChckId)
+                    .HasName("CK_tp_CheckPayments_chpy_chck_ID")
+                    .IsClustered();
+
+                entity.HasIndex(e => e.ChpyChpcId)
+                    .HasName("CK_tp_CheckPayments_chpy_chpc_ID");
+
+                entity.HasIndex(e => e.ChpyPytpId)
+                    .HasName("CK_tp_CheckPayments_chpy_pytp_ID");
+
+                entity.Property(e => e.ChpyId)
+                    .HasColumnName("chpy_ID")
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.ChpyAtopId).HasColumnName("chpy_atop_ID");
+
+                entity.Property(e => e.ChpyChckId).HasColumnName("chpy_chck_ID");
+
+                entity.Property(e => e.ChpyChpcId).HasColumnName("chpy_chpc_ID");
+
+                entity.Property(e => e.ChpyPytpId).HasColumnName("chpy_pytp_ID");
+
+                entity.Property(e => e.ChpySum)
+                    .HasColumnName("chpy_Sum")
+                    .HasColumnType("numeric(18, 4)");
+
+                entity.HasOne(d => d.ChpyChck)
+                    .WithMany(p => p.TpCheckPayments)
+                    .HasForeignKey(d => d.ChpyChckId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CheckPayments_Checks");
+
+                entity.HasOne(d => d.ChpyPytp)
+                    .WithMany(p => p.TpCheckPayments)
+                    .HasForeignKey(d => d.ChpyPytpId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CheckPayments_PayTypes");
+            });
+
+            modelBuilder.Entity<TpChecks>(entity =>
+            {
+                entity.HasKey(e => e.ChckId)
+                    .HasName("PK_Checks")
+                    .IsClustered(false);
+
+                entity.ToTable("tp_Checks");
+
+                entity.HasIndex(e => e.ChckChcktypId)
+                    .HasName("CK_tp_Checks_chck_chcktyp_ID");
+
+                entity.HasIndex(e => e.ChckChstId)
+                    .HasName("CK_tp_Checks_chck_chst_ID");
+
+                entity.HasIndex(e => e.ChckDevId)
+                    .HasName("CK_tp_Checks_chck_dev_ID");
+
+                entity.HasIndex(e => e.ChckDevIdPrinter)
+                    .HasName("CK_tp_Checks_chck_dev_ID_Printer");
+
+                entity.HasIndex(e => e.ChckDostId)
+                    .HasName("CK_tp_Checks_chck_dost_ID");
+
+                entity.HasIndex(e => e.ChckFsopId)
+                    .HasName("CK_tp_Checks_chck_fsop_ID");
+
+                entity.HasIndex(e => e.ChckPrchId)
+                    .HasName("CK_tp_Checks_chck_prch_ID")
+                    .IsClustered();
+
+                entity.HasIndex(e => e.ChckUsrId)
+                    .HasName("CK_tp_Checks_chck_usr_ID");
+
+                entity.HasIndex(e => new { e.ChckId, e.ChckPrchId, e.ChckDate, e.ChckChstId })
+                    .HasName("CI_tp_Checks_chck_Date");
+
+                entity.Property(e => e.ChckId)
+                    .HasColumnName("chck_ID")
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.ChckChange)
+                    .HasColumnName("chck_Change")
+                    .HasColumnType("numeric(18, 4)");
+
+                entity.Property(e => e.ChckChcktypId)
+                    .HasColumnName("chck_chcktyp_ID")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.ChckChstId).HasColumnName("chck_chst_ID");
+
+                entity.Property(e => e.ChckDate)
+                    .HasColumnName("chck_Date")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.ChckDevId).HasColumnName("chck_dev_ID");
+
+                entity.Property(e => e.ChckDevIdPrinter).HasColumnName("chck_dev_ID_Printer");
+
+                entity.Property(e => e.ChckDostId).HasColumnName("chck_dost_ID");
+
+                entity.Property(e => e.ChckFsopId).HasColumnName("chck_fsop_ID");
+
+                entity.Property(e => e.ChckName)
+                    .IsRequired()
+                    .HasColumnName("chck_Name");
+
+                entity.Property(e => e.ChckPrchId).HasColumnName("chck_prch_ID");
+
+                entity.Property(e => e.ChckUsrId).HasColumnName("chck_usr_ID");
+
+                entity.HasOne(d => d.ChckPrch)
+                    .WithMany(p => p.TpChecks)
+                    .HasForeignKey(d => d.ChckPrchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_tp_Checks_tp_PreChecks");
+
+                entity.HasOne(d => d.ChckUsr)
+                    .WithMany(p => p.TpChecks)
+                    .HasForeignKey(d => d.ChckUsrId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Checks_Users");
+            });
+
             modelBuilder.Entity<TpClients>(entity =>
             {
                 entity.HasKey(e => e.ClntId)
@@ -166,6 +305,11 @@ namespace CourierCore.Data
                     .HasForeignKey<TpGuestDeliveries>(d => d.GsdlvGestId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_tp_GuestDeliveries_tp_Guests");
+
+                entity.HasOne(d => d.GsdlvPytpIdPrepa)
+                    .WithMany(p => p.TpGuestDeliveries)
+                    .HasForeignKey(d => d.GsdlvPytpIdPrepaid)
+                    .HasConstraintName("FK_tp_GuestDeliveries_tp_PayTypes1");
 
                 entity.HasOne(d => d.GsdlvUsrIdCourierNavigation)
                     .WithMany(p => p.TpGuestDeliveries)
@@ -650,6 +794,56 @@ namespace CourierCore.Data
                     .HasConstraintName("FK_Orders_Users1");
             });
 
+            modelBuilder.Entity<TpPayTypes>(entity =>
+            {
+                entity.HasKey(e => e.PytpId)
+                    .HasName("PK_PayTypes");
+
+                entity.ToTable("tp_PayTypes");
+
+                entity.HasIndex(e => e.PytpDelId)
+                    .HasName("CK_tp_PayTypes_pytp_del_ID");
+
+                entity.HasIndex(e => e.PytpPbfmId)
+                    .HasName("CI_tp_PayTypes_pytp_pbfm_ID");
+
+                entity.HasIndex(e => e.PytpPtgrId)
+                    .HasName("CK_tp_PayTypes_pytp_ptgr_ID");
+
+                entity.HasIndex(e => e.PytpPytcId)
+                    .HasName("CK_tp_PayTypes_pytp_pytc_ID");
+
+                entity.Property(e => e.PytpId)
+                    .HasColumnName("pytp_ID")
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.PytpDelId).HasColumnName("pytp_del_ID");
+
+                entity.Property(e => e.PytpDescription).HasColumnName("pytp_Description");
+
+                entity.Property(e => e.PytpIsCash).HasColumnName("pytp_IsCash");
+
+                entity.Property(e => e.PytpIsDisabled).HasColumnName("pytp_IsDisabled");
+
+                entity.Property(e => e.PytpName)
+                    .IsRequired()
+                    .HasColumnName("pytp_Name");
+
+                entity.Property(e => e.PytpOrder).HasColumnName("pytp_Order");
+
+                entity.Property(e => e.PytpPbfmId).HasColumnName("pytp_pbfm_ID");
+
+                entity.Property(e => e.PytpPicture).HasColumnName("pytp_Picture");
+
+                entity.Property(e => e.PytpPictureFileName).HasColumnName("pytp_PictureFileName");
+
+                entity.Property(e => e.PytpPtgrId).HasColumnName("pytp_ptgr_ID");
+
+                entity.Property(e => e.PytpPytcId).HasColumnName("pytp_pytc_ID");
+
+                entity.Property(e => e.PytpSmallPicture).HasColumnName("pytp_SmallPicture");
+            });
+
             modelBuilder.Entity<TpPeople>(entity =>
             {
                 entity.HasKey(e => e.PeplId)
@@ -715,6 +909,164 @@ namespace CourierCore.Data
                 entity.Property(e => e.PeplSexId).HasColumnName("pepl_sex_ID");
 
                 entity.Property(e => e.PeplWorkplace).HasColumnName("pepl_Workplace");
+            });
+
+            modelBuilder.Entity<TpPreCheckItems>(entity =>
+            {
+                entity.HasKey(e => e.PcitId)
+                    .HasName("PK_PreCheckItems")
+                    .IsClustered(false);
+
+                entity.ToTable("tp_PreCheckItems");
+
+                entity.HasIndex(e => e.PcitMitmId)
+                    .HasName("CK_tp_PreCheckItems_pcit_mitm_ID");
+
+                entity.HasIndex(e => e.PcitMvtpId)
+                    .HasName("CK_tp_PreCheckItems_pcit_mvtp_ID");
+
+                entity.HasIndex(e => e.PcitPcitIdMaster)
+                    .HasName("CI_tp_PreCheckItems_pcit_pcit_ID_master");
+
+                entity.HasIndex(e => e.PcitPrchId)
+                    .HasName("CK_tp_PreCheckItems_pcit_prch_ID")
+                    .IsClustered();
+
+                entity.HasIndex(e => e.PcitSlgrId)
+                    .HasName("CK_tp_PreCheckItems_pcit_slgr_ID");
+
+                entity.Property(e => e.PcitId)
+                    .HasColumnName("pcit_ID")
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.PcitComment).HasColumnName("pcit_Comment");
+
+                entity.Property(e => e.PcitCount).HasColumnName("pcit_Count");
+
+                entity.Property(e => e.PcitIsHidden).HasColumnName("pcit_IsHidden");
+
+                entity.Property(e => e.PcitMarkCode).HasColumnName("pcit_MarkCode");
+
+                entity.Property(e => e.PcitMitmId).HasColumnName("pcit_mitm_ID");
+
+                entity.Property(e => e.PcitMvtpId).HasColumnName("pcit_mvtp_ID");
+
+                entity.Property(e => e.PcitOrder).HasColumnName("pcit_Order");
+
+                entity.Property(e => e.PcitPcitIdMaster).HasColumnName("pcit_pcit_ID_master");
+
+                entity.Property(e => e.PcitPrchId).HasColumnName("pcit_prch_ID");
+
+                entity.Property(e => e.PcitPrice)
+                    .HasColumnName("pcit_Price")
+                    .HasColumnType("numeric(18, 4)");
+
+                entity.Property(e => e.PcitPriceDiscount)
+                    .HasColumnName("pcit_PriceDiscount")
+                    .HasColumnType("numeric(18, 4)");
+
+                entity.Property(e => e.PcitPriceMargin)
+                    .HasColumnName("pcit_PriceMargin")
+                    .HasColumnType("numeric(18, 4)");
+
+                entity.Property(e => e.PcitPriceVat)
+                    .HasColumnName("pcit_PriceVAT")
+                    .HasColumnType("numeric(18, 4)");
+
+                entity.Property(e => e.PcitSlgrId).HasColumnName("pcit_slgr_ID");
+
+                entity.Property(e => e.PcitVat)
+                    .HasColumnName("pcit_VAT")
+                    .HasColumnType("numeric(18, 3)");
+
+                entity.Property(e => e.PcitVolume)
+                    .HasColumnName("pcit_Volume")
+                    .HasColumnType("numeric(18, 6)")
+                    .HasDefaultValueSql("((1))");
+
+                entity.HasOne(d => d.PcitMitm)
+                    .WithMany(p => p.TpPreCheckItems)
+                    .HasForeignKey(d => d.PcitMitmId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PreCheckItems_MenuItems");
+
+                entity.HasOne(d => d.PcitMvtp)
+                    .WithMany(p => p.TpPreCheckItems)
+                    .HasForeignKey(d => d.PcitMvtpId)
+                    .HasConstraintName("FK_PreCheckItems_MenuVolumeTypes");
+
+                entity.HasOne(d => d.PcitPcitIdMasterNavigation)
+                    .WithMany(p => p.InversePcitPcitIdMasterNavigation)
+                    .HasForeignKey(d => d.PcitPcitIdMaster)
+                    .HasConstraintName("FK_tp_PreCheckItems_tp_PreCheckItems");
+
+                entity.HasOne(d => d.PcitPrch)
+                    .WithMany(p => p.TpPreCheckItems)
+                    .HasForeignKey(d => d.PcitPrchId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PreCheckItems_PreChecks");
+            });
+
+            modelBuilder.Entity<TpPreChecks>(entity =>
+            {
+                entity.HasKey(e => e.PrchId)
+                    .HasName("PK_PreChecks");
+
+                entity.ToTable("tp_PreChecks");
+
+                entity.HasIndex(e => e.PrchDate)
+                    .HasName("CI_tp_PreChecks_prch_Date");
+
+                entity.HasIndex(e => e.PrchDevId)
+                    .HasName("CK_tp_PreChecks_prch_dev_ID");
+
+                entity.HasIndex(e => e.PrchDvsnId)
+                    .HasName("CK_tp_PreChecks_prch_dvsn_ID");
+
+                entity.HasIndex(e => e.PrchPcstId)
+                    .HasName("CK_tp_PreChecks_prch_pcst_ID");
+
+                entity.HasIndex(e => e.PrchPrchtypId)
+                    .HasName("CK_tp_PreChecks_prch_prchtyp_ID");
+
+                entity.HasIndex(e => e.PrchUsrId)
+                    .HasName("CK_tp_PreChecks_prch_usr_ID");
+
+                entity.HasIndex(e => new { e.PrchArchId, e.PrchDate })
+                    .HasName("IX_PreChecks_arch_ID_Date");
+
+                entity.Property(e => e.PrchId)
+                    .HasColumnName("prch_ID")
+                    .HasDefaultValueSql("(newid())");
+
+                entity.Property(e => e.PrchArchId).HasColumnName("prch_arch_ID");
+
+                entity.Property(e => e.PrchDate)
+                    .HasColumnName("prch_Date")
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.PrchDevId).HasColumnName("prch_dev_ID");
+
+                entity.Property(e => e.PrchDvsnId).HasColumnName("prch_dvsn_ID");
+
+                entity.Property(e => e.PrchName)
+                    .IsRequired()
+                    .HasColumnName("prch_Name");
+
+                entity.Property(e => e.PrchPcstId).HasColumnName("prch_pcst_ID");
+
+                entity.Property(e => e.PrchPrchtypId)
+                    .HasColumnName("prch_prchtyp_ID")
+                    .HasDefaultValueSql("((1))");
+
+                entity.Property(e => e.PrchUsrId).HasColumnName("prch_usr_ID");
+
+                entity.HasOne(d => d.PrchUsr)
+                    .WithMany(p => p.TpPreChecks)
+                    .HasForeignKey(d => d.PrchUsrId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PreChecks_Users");
             });
 
             modelBuilder.Entity<TpUserLocationPresence>(entity =>

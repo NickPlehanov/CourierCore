@@ -25,8 +25,8 @@ namespace CourierCore.Controllers {
         }
 
         // GET: api/TpGuestDeliveries/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TpGuestDeliveries>> GetTpGuestDeliveries(Guid id) {
+        [HttpGet("id")]
+        public async Task<ActionResult<TpGuestDeliveries>> GetTpGuestDeliveries([FromQuery] Guid id) {
             var tpGuestDeliveries = await _context.TpGuestDeliveries.FindAsync(id);
 
             if(tpGuestDeliveries == null) {
@@ -39,11 +39,11 @@ namespace CourierCore.Controllers {
         // PUT: api/TpGuestDeliveries/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTpGuestDeliveries(Guid id,TpGuestDeliveries tpGuestDeliveries) {
-            if(id != tpGuestDeliveries.GsdlvGestId) {
-                return BadRequest();
-            }
+        [HttpPut()]
+        public async Task<IActionResult> PutTpGuestDeliveries([FromBody]TpGuestDeliveries tpGuestDeliveries) {
+            //if(id != tpGuestDeliveries.GsdlvGestId) {
+            //    return BadRequest();
+            //}
 
             _context.Entry(tpGuestDeliveries).State = EntityState.Modified;
 
@@ -51,16 +51,17 @@ namespace CourierCore.Controllers {
                 await _context.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException) {
-                if(!TpGuestDeliveriesExists(id)) {
-                    return NotFound();
-                }
-                else {
-                    throw;
-                }
+                //if(!TpGuestDeliveriesExists(id)) {
+                    return BadRequest();
+                //}
+                //else {
+                //    throw;
+                //}
             }
 
-            return NoContent();
+            return Accepted();
         }
+
 
         // POST: api/TpGuestDeliveries
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -69,7 +70,7 @@ namespace CourierCore.Controllers {
         public async Task<ActionResult<TpGuestDeliveries>> PostTpGuestDeliveries(TpGuestDeliveries tpGuestDeliveries) {
             _context.TpGuestDeliveries.Add(tpGuestDeliveries);
             try {
-                await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+                await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
                 await _context.SaveChangesAsync();
             }
             catch(DbUpdateException) {

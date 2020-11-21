@@ -24,9 +24,9 @@ namespace CourierCore.Controllers {
             return await _context.TpGuests.ToListAsync();
         }
 
-        // GET: api/TpGuests/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<TpGuests>> GetTpGuests(Guid id) {
+        // GET: api/TpGuests/id?id=5
+        [HttpGet("id")]
+        public async Task<ActionResult<TpGuests>> GetTpGuests([FromQuery]Guid id) {
             var tpGuests = await _context.TpGuests.FindAsync(id);
 
             if(tpGuests == null) {
@@ -34,6 +34,45 @@ namespace CourierCore.Controllers {
             }
 
             return tpGuests;
+        }
+        // GET: api/TpGuests/gestByUsrID?courierID=5
+        [HttpGet("gestByUsrID")]
+        public IEnumerable<Guests_GuestDeliveries_Clients> GetGuestsByCourier([FromQuery]Guid courierID/*, [FromQuery] DateTime date*/) {
+            //DateTime dt = DateTime.Parse(date.ToShortDateString());
+            var gest = from gd in _context.TpGuestDeliveries
+                       join g in _context.TpGuests on gd.GsdlvGestId equals g.GestId
+                       join c in _context.TpClients on g.GestClntId equals c.ClntId
+                       where gd.GsdlvUsrIdCourier == courierID 
+                       && gd.GsdlvDlvrmtId==1
+                       //&& g.GestDateOpen.Date==dt
+                       //&& gd.GsdlvDlvrstId!=0
+                       select new {
+                           gest_ID = g.GestId,
+                           gestDateOpen = g.GestDateOpen,
+                           gestDateClose = g.GestDateClose,
+                           gestName = g.GestName,
+                           gestComment = g.GestComment,
+                           courierID = gd.GsdlvUsrIdCourier,
+                           clntID = c.ClntId,
+                           clntName=c.ClntName,
+                           clntPhones = c.ClntPhones
+                       };
+            List<Guests_GuestDeliveries_Clients> g_gd_c = new List<Guests_GuestDeliveries_Clients>(); 
+            foreach(var item in gest) {
+                g_gd_c.Add(new Guests_GuestDeliveries_Clients() {
+                    GestID=item.gest_ID,
+                    GestDateClose=item.gestDateClose,
+                    GestDateOpen=item.gestDateOpen,
+                    GestName=item.gestName,
+                    GestComment=item.gestComment,
+                    ClntID=item.clntID,
+                    ClntName=item.clntName,
+                    ClntPhones=item.clntPhones,
+                    CourierID=item.courierID
+                });
+                break;
+            }
+            return g_gd_c;
         }
 
         // PUT: api/TpGuests/5
@@ -68,7 +107,7 @@ namespace CourierCore.Controllers {
         [HttpPost]
         public async Task<ActionResult<TpGuests>> PostTpGuests(TpGuests tpGuests) {
             _context.TpGuests.Add(tpGuests);
-            await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+            await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTpGuests",new { id = tpGuests.GestId },tpGuests);

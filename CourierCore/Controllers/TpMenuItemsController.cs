@@ -68,7 +68,7 @@ namespace CourierCore.Controllers {
         [HttpPost]
         public async Task<ActionResult<TpMenuItems>> PostTpMenuItems(TpMenuItems tpMenuItems) {
             _context.TpMenuItems.Add(tpMenuItems);
-            await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+            await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTpMenuItems",new { id = tpMenuItems.MitmId },tpMenuItems);

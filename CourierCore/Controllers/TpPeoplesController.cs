@@ -68,7 +68,7 @@ namespace CourierCore.Controllers {
         [HttpPost]
         public async Task<ActionResult<TpPeople>> PostTpPeople(TpPeople tpPeople) {
             _context.TpPeople.Add(tpPeople);
-            await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+            await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetTpPeople",new { id = tpPeople.PeplId },tpPeople);

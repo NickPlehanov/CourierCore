@@ -79,7 +79,7 @@ namespace CourierCore.Controllers {
         public async Task<ActionResult<TpLocations>> PostTpLocations(TpLocations tpLocations) {
             _context.TpLocations.Add(tpLocations);
             try {
-                await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+                await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
                 await _context.SaveChangesAsync();
             }
             catch(DbUpdateException) {

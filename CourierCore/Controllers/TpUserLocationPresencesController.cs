@@ -55,11 +55,33 @@ namespace CourierCore.Controllers {
         // PUT: api/TpUserLocationPresences/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTpUserLocationPresence(Guid id,TpUserLocationPresence tpUserLocationPresence) {
-            if(id != tpUserLocationPresence.UslpId) {
-                return BadRequest();
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutTpUserLocationPresence(Guid id,TpUserLocationPresence tpUserLocationPresence) {
+        //    if(id != tpUserLocationPresence.UslpId) {
+        //        return BadRequest();
+        //    }
+
+        //    _context.Entry(tpUserLocationPresence).State = EntityState.Modified;
+
+        //    try {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch(DbUpdateConcurrencyException) {
+        //        if(!TpUserLocationPresenceExists(id)) {
+        //            return NotFound();
+        //        }
+        //        else {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
+        [HttpPut]
+        public async Task<IActionResult> PutTpUserLocationPresence([FromBody] TpUserLocationPresence tpUserLocationPresence) {
+            //if(id != tpUserLocationPresence.UslpId) {
+            //    return BadRequest();
+            //}
 
             _context.Entry(tpUserLocationPresence).State = EntityState.Modified;
 
@@ -67,7 +89,7 @@ namespace CourierCore.Controllers {
                 await _context.SaveChangesAsync();
             }
             catch(DbUpdateConcurrencyException) {
-                if(!TpUserLocationPresenceExists(id)) {
+                if(!TpUserLocationPresenceExists(tpUserLocationPresence.UslpId)) {
                     return NotFound();
                 }
                 else {
@@ -75,8 +97,9 @@ namespace CourierCore.Controllers {
                 }
             }
 
-            return NoContent();
+            return Accepted();
         }
+
 
         // POST: api/TpUserLocationPresences
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
@@ -85,7 +108,7 @@ namespace CourierCore.Controllers {
         public async Task<ActionResult<TpUserLocationPresence>> PostTpUserLocationPresence([FromBody] TpUserLocationPresence tpUserLocationPresence) {
             _context.TpUserLocationPresence.Add(tpUserLocationPresence);
             try {
-                await _context.Database.ExecuteSqlCommandAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
+                await _context.Database.ExecuteSqlRawAsync("tpsrv_logon",new SqlParameter("@Login","sa"),new SqlParameter("@Password","tillypad"));
                 await _context.SaveChangesAsync();
             }
             catch(DbUpdateException) {

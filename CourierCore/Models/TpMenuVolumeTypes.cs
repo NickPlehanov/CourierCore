@@ -10,6 +10,7 @@ namespace CourierCore.Models
         {
             TpMenuItems = new HashSet<TpMenuItems>();
             TpOrderItems = new HashSet<TpOrderItems>();
+            TpPreCheckItems = new HashSet<TpPreCheckItems>();
         }
 
         public Guid MvtpId { get; set; }
@@ -22,5 +23,6 @@ namespace CourierCore.Models
 
         public virtual ICollection<TpMenuItems> TpMenuItems { get; set; }
         public virtual ICollection<TpOrderItems> TpOrderItems { get; set; }
+        public virtual ICollection<TpPreCheckItems> TpPreCheckItems { get; set; }
     }
 }

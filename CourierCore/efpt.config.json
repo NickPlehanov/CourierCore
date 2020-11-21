@@ -14,47 +14,83 @@
    "Tables": [
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_Clients]"
+         "Name": "[dbo].[tp_CheckPayments]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_GuestDeliveries]"
+         "Name": "[dbo].[tp_Checks]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_Guests]"
+         "Name": "[dbo].[tp_Clients]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_Locations]"
+         "Name": "[dbo].[tp_GuestDeliveries]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_MenuItems]"
+         "Name": "[dbo].[tp_Guests]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_MenuVolumeTypes]"
+         "Name": "[dbo].[tp_Locations]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_OrderItems]"
+         "Name": "[dbo].[tp_MenuItems]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_Orders]"
+         "Name": "[dbo].[tp_MenuVolumeTypes]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_People]"
+         "Name": "[dbo].[tp_OrderItems]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_UserLocationPresence]"
+         "Name": "[dbo].[tp_Orders]",
+         "ObjectType": 0
       },
       {
          "HasPrimaryKey": true,
-         "Name": "[dbo].[tp_Users]"
+         "Name": "[dbo].[tp_PayTypes]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_People]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_PreCheckItems]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_PreChecks]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_UserLocationPresence]",
+         "ObjectType": 0
+      },
+      {
+         "HasPrimaryKey": true,
+         "Name": "[dbo].[tp_Users]",
+         "ObjectType": 0
       }
    ],
    "UseDatabaseNames": false,
@@ -64,6 +100,5 @@
    "UseInflector": false,
    "UseLegacyPluralizer": false,
    "UseNodaTime": false,
-   "UseSpatial": false,
-   "UseStoredProcedures": false
+   "UseSpatial": false
 }
