@@ -45,7 +45,7 @@ namespace CourierCore.Controllers {
                        where gd.GsdlvUsrIdCourier == courierID 
                        && gd.GsdlvDlvrmtId==1
                        //&& g.GestDateOpen.Date==dt
-                       //&& gd.GsdlvDlvrstId!=0
+                       //&& gd.GsdlvDlvrstId != 0
                        select new {
                            gest_ID = g.GestId,
                            gestDateOpen = g.GestDateOpen,
