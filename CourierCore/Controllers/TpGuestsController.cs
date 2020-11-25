@@ -55,7 +55,8 @@ namespace CourierCore.Controllers {
                            courierID = gd.GsdlvUsrIdCourier,
                            clntID = c.ClntId,
                            clntName=c.ClntName,
-                           clntPhones = c.ClntPhones
+                           clntPhones = c.ClntPhones,
+                           clntAddress = g.GestClientAddress
                        };
             List<Guests_GuestDeliveries_Clients> g_gd_c = new List<Guests_GuestDeliveries_Clients>(); 
             foreach(var item in gest) {
@@ -68,6 +69,7 @@ namespace CourierCore.Controllers {
                     ClntID=item.clntID,
                     ClntName=item.clntName,
                     ClntPhones=item.clntPhones,
+                    ClntAddress=item.clntAddress,
                     CourierID=item.courierID
                 });
                 break;

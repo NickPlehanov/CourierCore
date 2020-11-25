@@ -15,5 +15,6 @@ namespace CourierCore.Models {
         public Guid? ClntID { get; set; }
         public string ClntName { get; set; }
         public string ClntPhones { get; set; }
+        public string ClntAddress { get; set; }
     }
 }

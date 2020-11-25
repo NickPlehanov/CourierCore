@@ -51,6 +51,26 @@ namespace CourierCore.Controllers {
                 return (IEnumerable<TpUserLocationPresence>)tpUserLocationPresence;
             }
         }
+        [HttpGet()]
+        public IEnumerable<TpUserLocationPresence> GetTpUserLocationPresence([FromQuery] string usr_id,[FromQuery] string start,[FromQuery] string end) {
+            Guid _usrID = Guid.TryParse(usr_id,out _) ? Guid.Parse(usr_id) : Guid.Empty;
+            if(_usrID == Guid.Empty || !DateTime.TryParse(start.ToString(), out _) || !DateTime.TryParse(end.ToString(),out _))
+                return (IEnumerable<TpUserLocationPresence>)NotFound();
+            else {
+                DateTime _start = DateTime.Parse(start);
+                DateTime _end = DateTime.Parse(end);
+                var tpUserLocationPresence = _context.TpUserLocationPresence.Where(x => x.UslpUsrId == _usrID && x.UslpDateBegin >= _start && x.UslpDateEnd<=_end);
+                foreach(var item in tpUserLocationPresence) {
+                    item.CountHours = TimeSpan.FromHours(Convert.ToDouble((item.UslpDateEnd - item.UslpDateBegin).Value.TotalHours)).ToString(@"hh\:mm\:ss");
+                }
+
+                if(tpUserLocationPresence == null) {
+                    return (IEnumerable<TpUserLocationPresence>)NotFound();
+                }
+
+                return (IEnumerable<TpUserLocationPresence>)tpUserLocationPresence;
+            }
+        }
 
         // PUT: api/TpUserLocationPresences/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
